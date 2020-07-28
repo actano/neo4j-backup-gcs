@@ -19,6 +19,10 @@ if [ -z $BACKUP_NAME ]; then
     BACKUP_NAME=graph.db
 fi
 
+if [ -z $PROTOCOL ]; then
+  PROTOCOL="catchup"
+fi
+
 CURRENT_DATE=$(date -u +"%Y-%m-%dT%H%M%SZ")
 BACKUP_SET="$BACKUP_NAME-$CURRENT_DATE"
 BACKUP_DIR="/var/lib/neo4j/backups"
@@ -37,7 +41,7 @@ echo "To google storage bucket $GCS_BUCKET_NEO4J using credentials located at $G
 echo "============================================================"
 
 mkdir -p "$BACKUP_DIR/$BACKUP_SET"
-neo4j-admin backup --backup-dir="$BACKUP_DIR/$BACKUP_SET" --name=graph.db-backup --from="$NEO4J_HOST:$NEO4J_PORT" --protocol=catchup
+neo4j-admin backup --backup-dir="$BACKUP_DIR/$BACKUP_SET" --name=graph.db-backup --from="$NEO4J_HOST:$NEO4J_PORT" --protocol="$PROTOCOL"
 
 echo "Backup size:"
 du -hs "$BACKUP_DIR/$BACKUP_SET"
